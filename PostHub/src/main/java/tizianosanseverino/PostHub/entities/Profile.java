@@ -29,10 +29,10 @@ public class Profile {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User utente;
-    public Profile(String bios, String avatar_url, Timestamp created_at, Timestamp updated_at) {
+
+    public Profile(String bios, User utente, String avatar_url) {
         this.bios = bios;
+        this.utente = utente;
         this.avatar_url = avatar_url;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
     }
 }

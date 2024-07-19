@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
@@ -18,6 +19,12 @@ public class User {
     @GeneratedValue
     @Setter(AccessLevel.NONE)
     private UUID id;
+    @Column(name = "name")
+    private String name;
+    @Column(name = "surname")
+    private String surname;
+    @Column(name = "birthday")
+    private Date birthday;
      @Column(name = "username")
     private String username;
      @Column(name = "email")
@@ -46,11 +53,18 @@ public class User {
     @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
     private Set<Messagge> receivedMessages;
 
-    public User(String username, String email, String password, LocalDateTime created_at, LocalDateTime updated_at) {
+    public User(Date birthday, String name, String surname, String username, String email, String password,  Profile profilo, Set<Post> posts, Set<Comment> commenti, Set<Like> likes, Set<Messagge> sentMessages, Set<Messagge> receivedMessages) {
+        this.birthday = birthday;
+        this.name = name;
+        this.surname = surname;
         this.username = username;
         this.email = email;
         this.password = password;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
+        this.profilo = profilo;
+        this.posts = posts;
+        this.commenti = commenti;
+        this.likes = likes;
+        this.sentMessages = sentMessages;
+        this.receivedMessages = receivedMessages;
     }
 }

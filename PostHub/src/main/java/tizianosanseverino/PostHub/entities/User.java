@@ -37,7 +37,6 @@ public class User {
     private LocalDateTime updated_at;
     @OneToOne(mappedBy = "utente", cascade = CascadeType.ALL)
     private Profile profilo;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Post> posts;
 

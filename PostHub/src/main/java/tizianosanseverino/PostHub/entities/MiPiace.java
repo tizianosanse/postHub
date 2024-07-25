@@ -3,32 +3,28 @@ package tizianosanseverino.PostHub.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Timestamp;
 import java.util.UUID;
 
 @Entity
-@Table(name = "likes")
+@Table(name = "mi_piace")
 @NoArgsConstructor
 @ToString
 @Getter
 @Setter
-public class Like {
+public class MiPiace {
     @Id
     @GeneratedValue
     @Setter(AccessLevel.NONE)
     private UUID id;
-    private Timestamp createdAt;
+    boolean mi_piace;
 
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
     private User user;
 
-
-    public Like(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
+    public MiPiace(boolean mi_piace) {
+    this.mi_piace=mi_piace;    }
 }

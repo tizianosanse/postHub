@@ -8,10 +8,10 @@
 		<version>3.3.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>ep2024</groupId>
-	<artifactId>bwV</artifactId>
+	<groupId>tizianosanseverino</groupId>
+	<artifactId>postHub</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>bwV</name>
+	<name>postHub</name>
 	<description>EPIC ENERGY SERVICES</description>
 	<url/>
 	<licenses>

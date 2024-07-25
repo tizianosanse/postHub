@@ -19,8 +19,7 @@ public class Comment {
     private UUID id;
 
     private String content;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+
 
     @ManyToOne
     @JoinColumn(name = "post_id")
@@ -30,9 +29,8 @@ public class Comment {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Comment(String content, Timestamp createdAt, Timestamp updatedAt) {
+    public Comment(String content) {
         this.content = content;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+
     }
 }

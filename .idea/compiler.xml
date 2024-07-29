@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="bwV" />
         <module name="PostHub" />
+        <module name="postHub" />
       </profile>
     </annotationProcessing>
   </component>
@@ -16,6 +17,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="PostHub" options="-parameters" />
       <module name="bwV" options="-parameters" />
+      <module name="postHub" options="-parameters" />
     </option>
   </component>
 </project>

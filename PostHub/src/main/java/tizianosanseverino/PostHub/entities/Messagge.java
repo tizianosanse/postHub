@@ -18,8 +18,7 @@ public class Messagge {
     @Setter(AccessLevel.NONE)
     private UUID id;
     private String content;
-    private Timestamp createdAt;
-    private Timestamp readAt;
+
 
     @ManyToOne
     @JoinColumn(name = "sender_id")
@@ -30,9 +29,9 @@ public class Messagge {
     private User receiver;
 
 
-    public Messagge(Timestamp createdAt, String content, Timestamp readAt) {
-        this.createdAt = createdAt;
+    public Messagge(String content) {
+
         this.content = content;
-        this.readAt = readAt;
+
     }
 }

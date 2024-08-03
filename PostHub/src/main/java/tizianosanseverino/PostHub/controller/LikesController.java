@@ -24,7 +24,6 @@ public class LikesController {
     }
     @PostMapping("{userId}/{postId}")
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAuthority('USER')")
     public MiPiace save(@PathVariable UUID postId,@PathVariable UUID userId, @RequestBody @Validated NewLikeDTO body) {
         return likesService.addLike(body, postId,userId);
     }

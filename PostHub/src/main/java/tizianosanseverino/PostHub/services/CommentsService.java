@@ -18,6 +18,7 @@ import tizianosanseverino.PostHub.repositories.PostsRepository;
 import tizianosanseverino.PostHub.repositories.UsersRepository;
 
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -54,6 +55,9 @@ public class CommentsService {
         Comment found = this.findById(commentId);
         this.commentsRepository.delete(found);
     }
+
+
+
     public Comment findByIdAndUpdate(UUID commentId, NewCommentDTO commUp){
        Comment comment = this.findById(commentId);
         comment.setContent(commUp.content());

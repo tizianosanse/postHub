@@ -19,24 +19,18 @@ const Login = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            email: email,
-            password: password,
-          }),
+          body: JSON.stringify({ email, password }),
         }
       );
 
       if (!response.ok) {
-        throw new Error("Login failed");
+        throw new Error(
+          "Login fallito. Controlla le tue credenziali e riprova."
+        );
       }
 
       const data = await response.json();
-      console.log("Response Data:", data);
-
       localStorage.setItem("token", data.accessToken);
-      console.log(data);
-
-      // Reindirizza l'utente alla pagina protetta
       navigate("/home");
     } catch (error) {
       setError(error.message);
@@ -79,6 +73,13 @@ const Login = () => {
             {error && <Alert variant="danger">{error}</Alert>}
             <Button variant="primary" type="submit" className="w-100 mt-3">
               Login
+            </Button>
+            <Button
+              variant="link"
+              className="w-100 mt-2"
+              onClick={() => navigate("/register")}
+            >
+              Registrati
             </Button>
           </Form>
         </Col>

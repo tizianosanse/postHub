@@ -6,12 +6,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import tizianosanseverino.PostHub.entities.Comment;
+import tizianosanseverino.PostHub.entities.MiPiace;
 import tizianosanseverino.PostHub.entities.Post;
 import tizianosanseverino.PostHub.entities.User;
 import tizianosanseverino.PostHub.payloads.NewPostDTO;
 import tizianosanseverino.PostHub.payloads.NewUserDTO;
 import tizianosanseverino.PostHub.services.PostsService;
 
+import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -21,10 +24,17 @@ public class PostsController {
     private PostsService postService;
 
     @GetMapping
-    public Page<Post> getAllPosts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "id") String sortBy) {
+    public Page<Post> getAllPosts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "50") int size, @RequestParam(defaultValue = "id") String sortBy) {
         return postService.getPosts(page, size, sortBy);
     }
-
+    @GetMapping("/{postId}/comment")
+    public Set<Comment> getCommentPosts(@PathVariable UUID postId){
+        return postService.getCommentPosts(postId);
+    }
+    @GetMapping("/{postId}/like")
+    public Set<MiPiace> getLikePosts(@PathVariable UUID postId){
+        return postService.getLikePosts(postId);
+    }
 
     @PostMapping("/{userId}")
     @ResponseStatus(HttpStatus.CREATED)
@@ -47,6 +57,9 @@ public class PostsController {
         this.postService.findByIdAndDelete(postId);
     }
 
-
+    @GetMapping("/{Id}/profile")
+    public User getMyUser(@PathVariable UUID postId){
+        return postService.getMyUser(postId);
+    }
 
 }

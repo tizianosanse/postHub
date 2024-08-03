@@ -23,15 +23,15 @@ public class CommentsController {
     @Autowired
     private CommentsService commentsService;
     @GetMapping
-    public Page<Comment> getAllPosts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "id") String sortBy) {
+    public Page<Comment> getAllComments(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "id") String sortBy) {
         return commentsService.getComments(page, size, sortBy);
     }
     @PostMapping("/{userId}/{postId}")
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAuthority('USER')")
     public Comment save(@PathVariable UUID postId,@PathVariable UUID userId, @RequestBody @Validated NewCommentDTO body) {
         return commentsService.createComment(body, postId,userId);
     }
+
 
     @PutMapping("/{commentId}")
     public Comment findByIdAndUpdate(@PathVariable UUID commentId, @RequestBody NewCommentDTO body) {

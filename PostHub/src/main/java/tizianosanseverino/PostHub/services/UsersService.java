@@ -10,6 +10,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import tizianosanseverino.PostHub.entities.Comment;
+import tizianosanseverino.PostHub.entities.Post;
 import tizianosanseverino.PostHub.entities.Role;
 import tizianosanseverino.PostHub.entities.User;
 import tizianosanseverino.PostHub.exceptions.BadRequestException;
@@ -20,6 +22,7 @@ import tizianosanseverino.PostHub.repositories.UsersRepository;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -97,7 +100,10 @@ public class UsersService {
     public String uploadAvatar(MultipartFile file) throws IOException {
         return (String) cloudinaryUploader.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
     }
-
+    public Set<Post> getMyPosts(UUID userId){
+        User user = usersRepository.findById(userId).orElseThrow(()-> new NotFoundException(userId));
+        return user.getPosts();
+    }
 
 }
 

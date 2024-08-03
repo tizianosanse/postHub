@@ -32,7 +32,9 @@ h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
-
+.update-btn {
+  margin-right: 0.5em;
+}
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -50,6 +52,53 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* Navbar */
+/* NavbarComponent.css */
+.navbar-custom {
+  padding-left: 20px;
+  padding-right: 20px;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1030;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.brand-custom {
+  margin-right: 20px;
+}
+
+.search-form {
+  width: 100%;
+  max-width: 400px;
+  justify-content: center;
+}
+
+.search-input {
+  height: 32px;
+  border-radius: 0.25rem;
+}
+
+.search-button {
+  height: 32px;
+  font-size: 0.875rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.profile-link {
+  color: green;
+  margin-right: 15px;
+}
+
+.profile-link:hover {
+  color: lightgreen;
+}
+
+.logout-button {
+  margin-left: 15px;
+  height: 38px;
 }
 
 @media (prefers-color-scheme: light) {

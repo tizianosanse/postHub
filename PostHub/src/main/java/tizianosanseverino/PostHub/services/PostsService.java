@@ -6,6 +6,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import tizianosanseverino.PostHub.entities.Comment;
+import tizianosanseverino.PostHub.entities.MiPiace;
 import tizianosanseverino.PostHub.entities.Post;
 import tizianosanseverino.PostHub.entities.User;
 import tizianosanseverino.PostHub.exceptions.NotFoundException;
@@ -13,6 +15,8 @@ import tizianosanseverino.PostHub.payloads.NewPostDTO;
 import tizianosanseverino.PostHub.repositories.PostsRepository;
 import tizianosanseverino.PostHub.repositories.UsersRepository;
 
+
+import java.util.Set;
 import java.util.UUID;
 
 
@@ -39,7 +43,14 @@ public class PostsService {
     public Post findById(UUID postId) {
         return postsRepository.findById(postId).orElseThrow(() -> new NotFoundException(postId));
     }
-
+    public Set<Comment> getCommentPosts(UUID postId){
+        Post post = postsRepository.findById(postId).orElseThrow(()-> new NotFoundException(postId));
+        return post.getCommenti();
+      }
+    public Set<MiPiace> getLikePosts(UUID postId){
+        Post post = postsRepository.findById(postId).orElseThrow(()-> new NotFoundException(postId));
+        return post.getMi_piace();
+    }
 
     public void findByIdAndDelete(UUID postId) {
         Post found = this.findById(postId);
@@ -49,5 +60,9 @@ public class PostsService {
         Post post = this.findById(postId);
         post.setContent(postUp.content());
         return postsRepository.save(post);
+    }
+    public User getMyUser(UUID postId){
+        Post post = postsRepository.findById(postId).orElseThrow(()-> new NotFoundException(postId));
+        return post.getUser();
     }
 }

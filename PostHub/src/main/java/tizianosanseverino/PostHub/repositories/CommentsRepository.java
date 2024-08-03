@@ -12,4 +12,5 @@ import java.util.UUID;
 @Repository
 public interface CommentsRepository extends JpaRepository<Comment, UUID> {
     Optional<Comment> findById(UUID commentId);
+
 }

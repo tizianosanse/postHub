@@ -1,7 +1,9 @@
 package tizianosanseverino.PostHub.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import tizianosanseverino.PostHub.entities.User;
@@ -36,4 +38,7 @@ public class JWTTools {
         return Jwts.parser().verifyWith(Keys.hmacShaKeyFor(secret.getBytes())).build()
                 .parseSignedClaims(token).getPayload().getSubject();
     }
+
+
+
 }

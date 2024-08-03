@@ -7,28 +7,39 @@ import {
   Card,
   Button,
   Form,
+  Modal,
 } from "react-bootstrap";
-import { Link } from "react-router-dom";
 
-const Home = () => {
+const Profile = () => {
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState({});
+  // eslint-disable-next-line no-unused-vars
   const [likesCount, setLikesCount] = useState({});
   const [visibleComments, setVisibleComments] = useState({});
   const [newComment, setNewComment] = useState({});
   const [error, setError] = useState(null);
   const [userId, setUserId] = useState(null);
 
+  // Modale per aggiornamento del post
+  const [showModal, setShowModal] = useState(false);
+  const [currentPost, setCurrentPost] = useState(null);
+  const [updatedContent, setUpdatedContent] = useState("");
+
   useEffect(() => {
     fetchUserId();
-    fetchPosts();
   }, []);
+
+  useEffect(() => {
+    if (userId) {
+      fetchUserPosts(userId);
+    }
+  }, [userId]);
 
   const fetchUserId = async () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
-        throw new Error("Token non trovato");
+        throw new Error("Token not found");
       }
 
       const response = await fetch(
@@ -53,15 +64,15 @@ const Home = () => {
     }
   };
 
-  const fetchPosts = async () => {
+  const fetchUserPosts = async (userId) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
-        throw new Error("Token non trovato");
+        throw new Error("Token not found");
       }
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/posts`,
+        `${import.meta.env.VITE_API_BASE_URL}/users/${userId}/posts`,
         {
           method: "GET",
           headers: {
@@ -76,8 +87,8 @@ const Home = () => {
       }
 
       const data = await response.json();
-      setPosts(data.content);
-      data.content.forEach((post) => {
+      setPosts(data);
+      data.forEach((post) => {
         fetchLikes(post.id);
       });
     } catch (error) {
@@ -89,7 +100,7 @@ const Home = () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
-        throw new Error("Token non trovato");
+        throw new Error("Token not found");
       }
 
       const response = await fetch(
@@ -118,7 +129,7 @@ const Home = () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
-        throw new Error("Token non trovato");
+        throw new Error("Token not found");
       }
 
       const response = await fetch(
@@ -143,15 +154,16 @@ const Home = () => {
     }
   };
 
+  // eslint-disable-next-line no-unused-vars
   const handleLike = async (postId) => {
     try {
       if (!userId) {
-        throw new Error("User ID non disponibile");
+        throw new Error("User ID not available");
       }
 
       const token = localStorage.getItem("token");
       if (!token) {
-        throw new Error("Token non trovato");
+        throw new Error("Token not found");
       }
 
       const likeResponse = await fetch(
@@ -184,7 +196,7 @@ const Home = () => {
     setVisibleComments((prev) => {
       const newVisibility = !prev[postId];
       if (newVisibility) {
-        fetchComments(postId); // Fetch comments only when visibility is toggled
+        fetchComments(postId);
       }
       return { ...prev, [postId]: newVisibility };
     });
@@ -197,12 +209,12 @@ const Home = () => {
   const handleNewCommentSubmit = async (postId) => {
     try {
       if (!userId) {
-        throw new Error("User ID non disponibile");
+        throw new Error("User ID not available");
       }
 
       const token = localStorage.getItem("token");
       if (!token) {
-        throw new Error("Token non trovato");
+        throw new Error("Token not found");
       }
 
       const response = await fetch(
@@ -223,10 +235,125 @@ const Home = () => {
         throw new Error(`Failed to post comment for post ${postId}`);
       }
 
-      // Clear the comment input field
       setNewComment((prev) => ({ ...prev, [postId]: "" }));
-      // Refetch comments
       fetchComments(postId);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const handleDeletePost = async (postId) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this post?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Token not found");
+      }
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/posts/${postId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to delete post ${postId}`);
+      }
+
+      setPosts((prev) => prev.filter((post) => post.id !== postId));
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const handleDeleteComment = async (commentId, postId) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this comment?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Token not found");
+      }
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/comments/${commentId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to delete comment ${commentId}`);
+      }
+
+      setComments((prev) => ({
+        ...prev,
+        [postId]: prev[postId].filter((comment) => comment.id !== commentId),
+      }));
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const handleUpdatePost = (post) => {
+    setCurrentPost(post);
+    setUpdatedContent(post.content);
+    setShowModal(true);
+  };
+
+  const handleSaveChanges = async () => {
+    if (!currentPost) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Token not found");
+      }
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/posts/${currentPost.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            content: updatedContent,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update post");
+      }
+
+      // Update the post in the state
+      setPosts((prev) =>
+        prev.map((post) =>
+          post.id === currentPost.id
+            ? { ...post, content: updatedContent }
+            : post
+        )
+      );
+
+      setShowModal(false);
+      setCurrentPost(null);
+      setUpdatedContent("");
     } catch (error) {
       setError(error.message);
     }
@@ -241,7 +368,7 @@ const Home = () => {
       <Row className="w-100 justify-content-center">
         <Col xs={12} md={8} lg={6}>
           <Alert variant="warning" className="text-center m-5">
-            Questo è un annuncio pubblicitario!
+            This is an advertisement!
           </Alert>
 
           {error && <Alert variant="danger">{error}</Alert>}
@@ -249,22 +376,23 @@ const Home = () => {
             posts.map((post) => (
               <Card key={post.id} className="mb-3">
                 <Card.Body>
-                  <Card.Title>
-                    {/* Link to user's profile */}
-                    <Link to={`/user/${post.user.id}`}>
-                      {post.user.username}
-                    </Link>
-                  </Card.Title>
+                  <Card.Title>{post.user.username}</Card.Title>
                   <Card.Text>{post.content}</Card.Text>
                   <Button
-                    variant="outline-primary"
-                    className="mr-2"
-                    onClick={() => handleLike(post.id)}
+                    variant="outline-success"
+                    className="update-btn"
+                    onClick={() => handleUpdatePost(post)}
                   >
-                    {likesCount[post.id] || 0} Likes
+                    Update Post
                   </Button>
                   <Button
-                    className="mx-4"
+                    variant="danger"
+                    onClick={() => handleDeletePost(post.id)}
+                  >
+                    Delete Post
+                  </Button>
+                  <Button
+                    className="mx-2"
                     variant="primary"
                     onClick={() => toggleCommentsVisibility(post.id)}
                   >
@@ -280,6 +408,15 @@ const Home = () => {
                             <Card.Body>
                               <Card.Title>{comment.user.username}</Card.Title>
                               <Card.Text>{comment.content}</Card.Text>
+                              <Button
+                                variant="danger"
+                                size="sm"
+                                onClick={() =>
+                                  handleDeleteComment(comment.id, post.id)
+                                }
+                              >
+                                Remove Comment
+                              </Button>
                             </Card.Body>
                           </Card>
                         ))
@@ -316,8 +453,36 @@ const Home = () => {
           )}
         </Col>
       </Row>
+
+      {/* Modale per aggiornamento del post */}
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Update Post</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group>
+              <Form.Label>Post Content</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={updatedContent}
+                onChange={(e) => setUpdatedContent(e.target.value)}
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Close
+          </Button>
+          <Button variant="success" onClick={handleSaveChanges}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };
 
-export default Home;
+export default Profile;

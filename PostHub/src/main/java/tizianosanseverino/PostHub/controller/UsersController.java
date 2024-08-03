@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import tizianosanseverino.PostHub.entities.Comment;
+import tizianosanseverino.PostHub.entities.Post;
 import tizianosanseverino.PostHub.entities.User;
 import tizianosanseverino.PostHub.payloads.NewUserDTO;
 import tizianosanseverino.PostHub.services.PostsService;
@@ -13,6 +15,7 @@ import tizianosanseverino.PostHub.services.UsersService;
 
 import java.io.IOException;
 
+import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -48,10 +51,10 @@ public class UsersController {
         this.usersService.findByIdAndDelete(userId);
     }
 
-    @PostMapping("/{id}/avatar")
-    public User uploadAvatar(@PathVariable UUID id, @RequestParam("avatar") MultipartFile image) throws IOException {
-        String avatarURL = usersService.uploadAvatar(image);
-        return usersService.updateAvatar(id, avatarURL);
+
+    @GetMapping("/{userId}/posts")
+    public Set<Post> getMyPosts(@PathVariable UUID userId){
+        return usersService.getMyPosts(userId);
     }
 
 }

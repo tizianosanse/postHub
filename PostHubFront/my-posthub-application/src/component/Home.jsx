@@ -7,6 +7,7 @@ import {
   Card,
   Button,
   Form,
+  Image,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
@@ -18,6 +19,7 @@ const Home = () => {
   const [newComment, setNewComment] = useState({});
   const [error, setError] = useState(null);
   const [userId, setUserId] = useState(null);
+  const [userLikes, setUserLikes] = useState({});
 
   useEffect(() => {
     fetchUserId();
@@ -79,6 +81,7 @@ const Home = () => {
       setPosts(data.content);
       data.content.forEach((post) => {
         fetchLikes(post.id);
+        checkUserLike(post.id);
       });
     } catch (error) {
       setError(error.message);
@@ -114,6 +117,100 @@ const Home = () => {
     }
   };
 
+  const checkUserLike = async (postId) => {
+    try {
+      if (!userId) {
+        return;
+      }
+
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Token non trovato");
+      }
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/posts/${postId}/like`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch likes for post ${postId}`);
+      }
+
+      const data = await response.json();
+      const userLike = data.find((like) => like.user.id === userId);
+
+      setUserLikes((prev) => ({
+        ...prev,
+        [postId]: !!userLike, // True if user liked the post, false otherwise
+      }));
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const handleLike = async (postId) => {
+    try {
+      if (!userId) {
+        throw new Error("User ID non disponibile");
+      }
+
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Token non trovato");
+      }
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/likes/${userId}/${postId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            like: !userLikes[postId], // Toggle like status
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to like/unlike post ${postId}. Status: ${response.status}`
+        );
+      }
+
+      // Update the local state to reflect the like/unlike action
+      setLikesCount((prev) => ({
+        ...prev,
+        [postId]: userLikes[postId] ? prev[postId] - 1 : prev[postId] + 1,
+      }));
+
+      setUserLikes((prev) => ({
+        ...prev,
+        [postId]: !prev[postId],
+      }));
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const toggleCommentsVisibility = (postId) => {
+    setVisibleComments((prev) => {
+      const newVisibility = !prev[postId];
+      if (newVisibility) {
+        fetchComments(postId); // Fetch comments only when visibility is toggled
+      }
+      return { ...prev, [postId]: newVisibility };
+    });
+  };
+
   const fetchComments = async (postId) => {
     try {
       const token = localStorage.getItem("token");
@@ -141,53 +238,6 @@ const Home = () => {
     } catch (error) {
       setError(error.message);
     }
-  };
-
-  const handleLike = async (postId) => {
-    try {
-      if (!userId) {
-        throw new Error("User ID non disponibile");
-      }
-
-      const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("Token non trovato");
-      }
-
-      const likeResponse = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/likes/${userId}/${postId}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            like: true,
-          }),
-        }
-      );
-
-      if (!likeResponse.ok) {
-        throw new Error(
-          `Failed to like post ${postId}. Status: ${likeResponse.status}`
-        );
-      }
-
-      setLikesCount((prev) => ({ ...prev, [postId]: (prev[postId] || 0) + 1 }));
-    } catch (error) {
-      setError(error.message);
-    }
-  };
-
-  const toggleCommentsVisibility = (postId) => {
-    setVisibleComments((prev) => {
-      const newVisibility = !prev[postId];
-      if (newVisibility) {
-        fetchComments(postId); // Fetch comments only when visibility is toggled
-      }
-      return { ...prev, [postId]: newVisibility };
-    });
   };
 
   const handleNewCommentChange = (postId, value) => {
@@ -249,65 +299,105 @@ const Home = () => {
             posts.map((post) => (
               <Card key={post.id} className="mb-3">
                 <Card.Body>
-                  <Card.Title>
-                    {/* Link to user's profile */}
-                    <Link to={`/user/${post.user.id}`}>
-                      {post.user.username}
-                    </Link>
-                  </Card.Title>
-                  <Card.Text>{post.content}</Card.Text>
-                  <Button
-                    variant="outline-primary"
-                    className="mr-2"
-                    onClick={() => handleLike(post.id)}
-                  >
-                    {likesCount[post.id] || 0} Likes
-                  </Button>
-                  <Button
-                    className="mx-4"
-                    variant="primary"
-                    onClick={() => toggleCommentsVisibility(post.id)}
-                  >
-                    {visibleComments[post.id]
-                      ? "Hide Comments"
-                      : "View Comments"}
-                  </Button>
-                  {visibleComments[post.id] && (
-                    <div className="mt-3">
-                      {comments[post.id] && comments[post.id].length > 0 ? (
-                        comments[post.id].map((comment) => (
-                          <Card key={comment.id} className="mt-2">
-                            <Card.Body>
-                              <Card.Title>{comment.user.username}</Card.Title>
-                              <Card.Text>{comment.content}</Card.Text>
-                            </Card.Body>
-                          </Card>
-                        ))
-                      ) : (
-                        <Alert variant="info">No comments available</Alert>
-                      )}
-                      <Form className="mt-3">
-                        <Form.Group>
-                          <Form.Control
-                            as="textarea"
-                            rows={3}
-                            placeholder="Add a comment..."
-                            value={newComment[post.id] || ""}
-                            onChange={(e) =>
-                              handleNewCommentChange(post.id, e.target.value)
-                            }
-                          />
-                        </Form.Group>
-                        <Button
-                          className="mt-2"
-                          variant="primary"
-                          onClick={() => handleNewCommentSubmit(post.id)}
+                  <Row>
+                    <Col xs={10}>
+                      <Card.Title className="d-flex align-items-center">
+                        <Link
+                          to={`/user/${post.user.id}`}
+                          className="d-flex align-items-center"
                         >
-                          Post Comment
-                        </Button>
-                      </Form>
-                    </div>
-                  )}
+                          {post.user.username}
+                          {post.user.avatar && (
+                            <Image
+                              src={post.user.avatar}
+                              roundedCircle
+                              fluid
+                              style={{ maxWidth: "30px", marginLeft: "10px" }}
+                            />
+                          )}
+                        </Link>
+                      </Card.Title>
+                      <Card.Text>{post.content}</Card.Text>
+                      <Button
+                        variant={
+                          userLikes[post.id] ? "success" : "outline-primary"
+                        }
+                        className="mr-2"
+                        onClick={() => handleLike(post.id)}
+                      >
+                        {likesCount[post.id] || 0} Likes
+                      </Button>
+                      <Button
+                        className="mx-4"
+                        variant="primary"
+                        onClick={() => toggleCommentsVisibility(post.id)}
+                      >
+                        {visibleComments[post.id]
+                          ? "Hide Comments"
+                          : "View Comments"}
+                      </Button>
+                      {visibleComments[post.id] && (
+                        <div className="mt-3">
+                          {comments[post.id] && comments[post.id].length > 0 ? (
+                            comments[post.id].map((comment) => (
+                              <Card key={comment.id} className="mt-2">
+                                <Card.Body>
+                                  <Row>
+                                    <Col
+                                      xs={2}
+                                      className="d-flex align-items-center"
+                                    >
+                                      {comment.user.avatar && (
+                                        <Image
+                                          src={comment.user.avatar}
+                                          roundedCircle
+                                          fluid
+                                          style={{ maxWidth: "40px" }}
+                                        />
+                                      )}
+                                    </Col>
+                                    <Col xs={10}>
+                                      <Card.Title>
+                                        <Link to={`/user/${comment.user.id}`}>
+                                          {comment.user.username}
+                                        </Link>
+                                      </Card.Title>
+                                      <Card.Text>{comment.content}</Card.Text>
+                                    </Col>
+                                  </Row>
+                                </Card.Body>
+                              </Card>
+                            ))
+                          ) : (
+                            <Alert variant="info">No comments available</Alert>
+                          )}
+                          <Form className="mt-3">
+                            <Form.Group>
+                              <Form.Control
+                                as="textarea"
+                                rows={3}
+                                placeholder="Add a comment..."
+                                value={newComment[post.id] || ""}
+                                onChange={(e) =>
+                                  handleNewCommentChange(
+                                    post.id,
+                                    e.target.value
+                                  )
+                                }
+                              />
+                            </Form.Group>
+                            <Button
+                              className="mt-2"
+                              variant="primary"
+                              onClick={() => handleNewCommentSubmit(post.id)}
+                            >
+                              Post Comment
+                            </Button>
+                          </Form>
+                        </div>
+                      )}
+                    </Col>
+                  </Row>
                 </Card.Body>
               </Card>
             ))

@@ -57,7 +57,7 @@ public class PostsController {
         this.postService.findByIdAndDelete(postId);
     }
 
-    @GetMapping("/{Id}/profile")
+    @GetMapping("/{postId}/profile")
     public User getMyUser(@PathVariable UUID postId){
         return postService.getMyUser(postId);
     }

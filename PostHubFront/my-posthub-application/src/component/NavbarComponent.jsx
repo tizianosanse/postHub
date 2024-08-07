@@ -1,5 +1,13 @@
 import { useState, useEffect } from "react";
-import { Navbar, Nav, Button, Modal, Form, Alert } from "react-bootstrap";
+import {
+  Navbar,
+  Nav,
+  Button,
+  Modal,
+  Form,
+  Alert,
+  NavDropdown,
+} from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 
 const NavbarComponent = () => {
@@ -88,14 +96,32 @@ const NavbarComponent = () => {
           PostHub
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse
-          id="basic-navbar-nav"
-          className="d-flex justify-content-between align-items-center"
-        >
-          <Button variant="primary" onClick={handleShowModal}>
-            Publish Post
-          </Button>
-          <div className="d-flex align-items-center">
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="mr-auto">
+            <Button
+              variant="primary"
+              onClick={handleShowModal}
+              className="d-none d-lg-inline"
+            >
+              Publish Post
+            </Button>
+            <NavDropdown
+              title="Menu"
+              id="basic-nav-dropdown"
+              className="d-lg-none"
+            >
+              <NavDropdown.Item onClick={handleShowModal}>
+                Publish Post
+              </NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/profile">
+                Profile
+              </NavDropdown.Item>
+              <NavDropdown.Item onClick={handleLogout} className="text-danger">
+                Logout
+              </NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+          <div className="d-none d-lg-flex align-items-center m-2">
             <Nav.Link as={Link} to="/profile" className="profile-link">
               Profile
             </Nav.Link>

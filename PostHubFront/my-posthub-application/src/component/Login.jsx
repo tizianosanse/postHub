@@ -75,7 +75,7 @@ const Login = () => {
               Login
             </Button>
             <Button
-              variant="link"
+              variant="dark"
               className="w-100 mt-2"
               onClick={() => navigate("/register")}
             >

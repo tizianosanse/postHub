@@ -66,14 +66,20 @@ const Register = () => {
   return (
     <Container
       fluid
-      className="d-flex align-items-center justify-content-center vh-100"
-      style={{ backgroundColor: "#f8f9fa" }}
+      className="d-flex align-items-center justify-content-center vh-100 bg-light-gray"
     >
       <Row className="justify-content-center w-100">
-        <Col xs={10} sm={8} md={6} lg={4}>
+        <Col
+          xs={12}
+          sm={10}
+          md={8}
+          lg={6}
+          xl={4}
+          className="scrollable-form-container"
+        >
           <Form
             onSubmit={handleSubmit}
-            className="p-3 border rounded bg-white shadow"
+            className="p-4 border rounded bg-white shadow scrollable-form"
           >
             <h2 className="text-center mb-3">Registrati</h2>
             <Form.Group controlId="formName" className="mb-2">
@@ -152,7 +158,7 @@ const Register = () => {
               Registrati
             </Button>
             <Button
-              variant="dark"
+              variant="primary"
               className="w-100"
               onClick={() => navigate("/login")}
             >

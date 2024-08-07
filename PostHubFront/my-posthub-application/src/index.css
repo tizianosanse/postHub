@@ -54,6 +54,56 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content {
+  flex: 1;
+}
+
+.navbar-custom {
+  background-color: #0e0e0e;
+}
+
+.navbar-custom .navbar-nav .nav-link {
+  color: #ffffff;
+}
+
+.navbar-custom .navbar-nav .nav-link:hover {
+  color: #f8f9fa;
+}
+
+.navbar-custom .navbar-nav .dropdown-menu {
+  background-color: #0e0e0e;
+}
+
+.navbar-custom .navbar-nav .dropdown-item {
+  color: #ffffff;
+}
+
+.navbar-custom .navbar-nav .dropdown-item:hover {
+  background-color: #333333;
+}
+/* Footer */
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #0e0e0e;
+  padding: 10px 0;
+  box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.footer-text {
+  font-family: "Arial", sans-serif;
+  font-size: 1.5rem;
+  color: #ffffff;
+}
+
 /* Navbar */
 /* NavbarComponent.css */
 .navbar-custom {
@@ -99,6 +149,61 @@ button:focus-visible {
 .logout-button {
   margin-left: 15px;
   height: 38px;
+}
+.container-custom {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  overflow: hidden; /* Prevent the entire container from scrolling */
+}
+
+.scrollable-section {
+  overflow-y: auto;
+  max-height: calc(100vh - 10rem); /* Adjust height as needed */
+}
+
+.image-avatar {
+  max-width: 80px;
+}
+
+.image-avatar-small {
+  max-width: 40px;
+}
+
+.image-avatar-medium {
+  max-width: 50px;
+}
+
+.card-recent-likes {
+  margin-bottom: 1rem;
+}
+
+.row-center {
+  justify-content: center;
+}
+
+.alert-center {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.mt-5-custom {
+  margin-top: 5rem;
+}
+
+.mb-3-custom {
+  margin-bottom: 1rem;
+}
+
+.mt-3-custom {
+  margin-top: 1rem;
+}
+
+.mt-2-custom {
+  margin-top: 0.5rem;
+}
+
+.mt-5-custom-btn {
+  margin-top: 2rem;
 }
 
 @media (prefers-color-scheme: light) {

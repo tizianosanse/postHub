@@ -17,6 +17,7 @@ import tizianosanseverino.PostHub.repositories.LikesRepository;
 import tizianosanseverino.PostHub.repositories.PostsRepository;
 import tizianosanseverino.PostHub.repositories.UsersRepository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -35,14 +36,28 @@ public class LikesService {
     }
 
 
+    public MiPiace toggleLike(UUID userId, UUID postId, NewLikeDTO body) {
+        User user = usersRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
-    public MiPiace addLike(NewLikeDTO body, UUID postId,UUID userId) {
-        User user=usersRepository.findById(userId).orElseThrow(()->new NotFoundException("questo id e sbagliato"));
-        Post post= postsRepository.findById(postId).orElseThrow( ()-> new NotFoundException("post con id " + postId + " non trovato!"));
-        MiPiace like = new MiPiace(body.like());
-        like.setUser(user);
-        like.setPost(post);
-        return likesRepository.save(like);
+        Post post = postsRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException("Post not found"));
+
+        Optional<MiPiace> existingLike = likesRepository.findByUserAndPost(user, post);
+
+        if (existingLike.isPresent()) {
+            likesRepository.delete(existingLike.get());
+            return null;
+        } else {
+            if (body.like() != null && body.like()) {
+                MiPiace like = new MiPiace();
+                like.setUser(user);
+                like.setPost(post);
+                return likesRepository.save(like);
+            } else {
+                return null;
+            }
+        }
     }
 
 

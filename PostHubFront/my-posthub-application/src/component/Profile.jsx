@@ -11,6 +11,9 @@ import {
   Image,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import myBannerImage from "../assets/banner.svg";
+import myLogo from "../assets/1.svg";
+import TrashIcon from "../assets/trash.svg";
 
 const Profile = () => {
   const [posts, setPosts] = useState([]);
@@ -33,7 +36,6 @@ const Profile = () => {
     email: "",
     password: "",
   });
-  // Modal for updating the post
   const [showModal, setShowModal] = useState(false);
   const [currentPost, setCurrentPost] = useState(null);
   const [updatedContent, setUpdatedContent] = useState("");
@@ -133,7 +135,7 @@ const Profile = () => {
       setPosts(data);
       data.forEach((post) => {
         fetchLikes(post.id);
-        fetchComments(post.id); // Fetch comments for each post
+        fetchComments(post.id);
       });
     } catch (error) {
       setError(error.message);
@@ -458,6 +460,7 @@ const Profile = () => {
         email: "",
         password: "",
       });
+      console.log(updatedUser);
     } catch (error) {
       setError(error.message);
     }
@@ -474,7 +477,7 @@ const Profile = () => {
             <Card className="mb-3 card-recent-likes">
               <Card.Body>
                 <Row>
-                  <Col xs={4}>
+                  <Col xs={3}>
                     {userInfo.avatar && (
                       <Image
                         src={userInfo.avatar}
@@ -484,16 +487,19 @@ const Profile = () => {
                       />
                     )}
                   </Col>
-                  <Col xs={9}>
+                  <Col xs={10}>
                     <Card.Title>{userInfo.username}</Card.Title>
                     <Card.Text>{userInfo.email}</Card.Text>
                     <Card.Text>{userInfo.bios}</Card.Text>
                     <Button
-                      variant="primary"
+                      className="edit-btn"
                       onClick={() => setShowEditModal(true)}
                     >
                       Edit Info
                     </Button>
+                    <Link className="btn" variant="success" to="/admin">
+                      ADM Edit Users
+                    </Link>
                   </Col>
                 </Row>
               </Card.Body>
@@ -528,12 +534,22 @@ const Profile = () => {
                   </Card>
                 ))
             ) : (
-              <Alert variant="info">No recent likes available</Alert>
+              <Alert className="alert-comm">No recent likes available</Alert>
             )}
           </Col>
-          <Col xs={12} md={8} lg={6} className="scrollable-section">
-            <Alert variant="warning" className="alert-center">
-              This is an advertisement!
+          <Col
+            xs={12}
+            md={8}
+            lg={6}
+            className="scrollable-section align-items-center"
+          >
+            <Alert className="banner alert-center">
+              <Image
+                src={myBannerImage}
+                alt="Advertisement Banner"
+                fluid
+                className="w-100"
+              />
             </Alert>
 
             {error && <Alert variant="danger">{error}</Alert>}
@@ -556,35 +572,41 @@ const Profile = () => {
                         <Card.Title>{post.user.username}</Card.Title>
                         <Card.Text>{post.content}</Card.Text>
                         <Button
-                          variant={
-                            userLikes[post.id] ? "success" : "outline-primary"
+                          className={
+                            userLikes[post.id]
+                              ? "btn-like-ye mr-2"
+                              : "btn-like-no mr-2"
                           }
-                          className="mx-2"
                           onClick={() => handleLike(post.id)}
                         >
                           Like {likesCount[post.id] || 0}
                         </Button>
                         <Button
-                          variant="outline-success"
+                          className="view-comm mx-2"
+                          onClick={() => toggleCommentsVisibility(post.id)}
+                        >
+                          {visibleComments[post.id]
+                            ? "Hide Comments"
+                            : "View Comments"}
+                        </Button>
+                        <Button
                           className="update-btn"
                           onClick={() => handleUpdatePost(post)}
                         >
                           Update Post
                         </Button>
                         <Button
-                          variant="danger"
+                          className="btn-delete-comm"
                           onClick={() => handleDeletePost(post.id)}
                         >
-                          Delete Post
-                        </Button>
-                        <Button
-                          className="mx-2"
-                          variant="primary"
-                          onClick={() => toggleCommentsVisibility(post.id)}
-                        >
-                          {visibleComments[post.id]
-                            ? "Hide Comments"
-                            : "View Comments"}
+                          <img
+                            src={TrashIcon}
+                            alt="Delete"
+                            style={{
+                              width: "16px",
+                              height: "16px",
+                            }}
+                          />
                         </Button>
                         {visibleComments[post.id] && (
                           <div className="mt-3 mt-3-custom">
@@ -610,7 +632,7 @@ const Profile = () => {
                                           />
                                         )}
                                       </Col>
-                                      <Col xs={10}>
+                                      <Col xs={8}>
                                         <Card.Title>
                                           <Link to={`/user/${comment.user.id}`}>
                                             {comment.user.username}
@@ -618,22 +640,33 @@ const Profile = () => {
                                         </Card.Title>
                                         <Card.Text>{comment.content}</Card.Text>
                                       </Col>
+                                      <Col xs={2}>
+                                        <Button
+                                          className="btn-delete-comm mt-5 mt-5-custom-btn"
+                                          size="sm"
+                                          onClick={() =>
+                                            handleDeleteComment(
+                                              comment.id,
+                                              post.id
+                                            )
+                                          }
+                                        >
+                                          <img
+                                            src={TrashIcon}
+                                            alt="Delete"
+                                            style={{
+                                              width: "16px",
+                                              height: "16px",
+                                            }}
+                                          />
+                                        </Button>
+                                      </Col>
                                     </Row>
-                                    <Button
-                                      className="mt-5 mt-5-custom-btn"
-                                      variant="danger"
-                                      size="sm"
-                                      onClick={() =>
-                                        handleDeleteComment(comment.id, post.id)
-                                      }
-                                    >
-                                      Remove Comment
-                                    </Button>
                                   </Card.Body>
                                 </Card>
                               ))
                             ) : (
-                              <Alert variant="info">
+                              <Alert className="alert-comm">
                                 No comments available
                               </Alert>
                             )}
@@ -653,8 +686,7 @@ const Profile = () => {
                                 />
                               </Form.Group>
                               <Button
-                                className="mt-2 mt-2-custom"
-                                variant="primary"
+                                className="post-comm mt-2 mt-2-custom"
                                 onClick={() => handleNewCommentSubmit(post.id)}
                               >
                                 Post Comment
@@ -668,7 +700,7 @@ const Profile = () => {
                 </Card>
               ))
             ) : (
-              <Alert variant="info">No posts available</Alert>
+              <Alert className="alert-comm">No posts available</Alert>
             )}
           </Col>
         </Row>
@@ -681,7 +713,9 @@ const Profile = () => {
           <Modal.Body>
             <Form>
               <Form.Group>
-                <Form.Label>Post Content</Form.Label>
+                <div className="d-flex justify-content-center mb-3">
+                  <Image src={myLogo} width={80} height={80} className="logo" />
+                </div>
                 <Form.Control
                   as="textarea"
                   rows={3}
@@ -692,10 +726,10 @@ const Profile = () => {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowModal(false)}>
+            <Button className="btn-delete" onClick={() => setShowModal(false)}>
               Close
             </Button>
-            <Button variant="success" onClick={handleSaveChanges}>
+            <Button className="update-btn" onClick={handleSaveChanges}>
               Save Changes
             </Button>
           </Modal.Footer>
@@ -704,6 +738,9 @@ const Profile = () => {
         {/* Modal for editing user info */}
         <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
           <Modal.Header closeButton>
+            <div className="d-flex justify-content-center mb-3">
+              <Image src={myLogo} width={80} height={80} className="logo" />
+            </div>
             <Modal.Title>Edit User Information</Modal.Title>
           </Modal.Header>
           <Modal.Body>
@@ -789,10 +826,13 @@ const Profile = () => {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowEditModal(false)}>
+            <Button
+              className="btn-delete"
+              onClick={() => setShowEditModal(false)}
+            >
               Close
             </Button>
-            <Button variant="success" onClick={handleEditUser}>
+            <Button className="update-btn" onClick={handleEditUser}>
               Save Changes
             </Button>
           </Modal.Footer>

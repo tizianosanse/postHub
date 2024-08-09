@@ -7,8 +7,10 @@ import {
   Form,
   Alert,
   NavDropdown,
+  Image,
 } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import myLogo from "../assets/1.svg";
 
 const NavbarComponent = () => {
   const [showModal, setShowModal] = useState(false);
@@ -96,12 +98,14 @@ const NavbarComponent = () => {
           PostHub
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Collapse
+          id="basic-navbar-nav"
+          className="d-flex justify-content-between w-100"
+        >
           <Nav className="mr-auto">
             <Button
-              variant="primary"
               onClick={handleShowModal}
-              className="d-none d-lg-inline"
+              className="pubb-btn d-none d-lg-inline"
             >
               Publish Post
             </Button>
@@ -121,14 +125,15 @@ const NavbarComponent = () => {
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
-          <div className="d-none d-lg-flex align-items-center m-2">
+
+          <div className="d-none d-lg-flex align-items-center">
             <Nav.Link as={Link} to="/profile" className="profile-link">
               Profile
             </Nav.Link>
             <Button
               variant="outline-danger"
               onClick={handleLogout}
-              className="logout-button"
+              className="logout-button ml-2"
             >
               Logout
             </Button>
@@ -139,7 +144,9 @@ const NavbarComponent = () => {
       {/* Modal for creating a post */}
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Create New Post</Modal.Title>
+          <div className="w-100 d-flex justify-content-center">
+            <Image src={myLogo} width={100} height={100} className="logo" />
+          </div>
         </Modal.Header>
         <Modal.Body>
           {error && <Alert variant="danger">{error}</Alert>}
@@ -155,7 +162,7 @@ const NavbarComponent = () => {
                 required
               />
             </Form.Group>
-            <Button variant="primary" type="submit" className="mt-3">
+            <Button type="submit" className="view-comm mt-3">
               Submit
             </Button>
           </Form>

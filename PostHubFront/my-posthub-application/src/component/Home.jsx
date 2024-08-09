@@ -10,6 +10,7 @@ import {
   Image,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import myBannerImage from "../assets/banner.svg";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -148,7 +149,7 @@ const Home = () => {
 
       setUserLikes((prev) => ({
         ...prev,
-        [postId]: !!userLike, // True if user liked the post, false otherwise
+        [postId]: !!userLike,
       }));
     } catch (error) {
       setError(error.message);
@@ -285,22 +286,29 @@ const Home = () => {
   return (
     <Container
       fluid
-      className="d-flex flex-column align-items-center mt-4"
+      className="d-flex flex-column align-items-center mt-5"
       style={{ backgroundColor: "#f8f9fa" }}
     >
-      <Row className="w-100 justify-content-center">
-        <Col xs={12} md={8} lg={6}>
-          <Alert variant="warning" className="text-center m-5">
-            Questo è un annuncio pubblicitario!
+      <Row className="w-100 justify-content-center mt-5">
+        <Col xs={12} md={8} lg={6} className="d-flex justify-content-center">
+          <Alert className="banner p-0">
+            <Image
+              src={myBannerImage}
+              alt="Advertisement Banner"
+              fluid
+              className="w-100"
+            />
           </Alert>
+        </Col>
 
+        <Col xs={12} md={8} lg={6}>
           {error && <Alert variant="danger">{error}</Alert>}
           {posts.length > 0 ? (
             posts.map((post) => (
               <Card key={post.id} className="mb-3">
                 <Card.Body>
                   <Row>
-                    <Col xs={10}>
+                    <Col xs={10} className="scrollable-section ">
                       <Card.Title className="d-flex align-items-center">
                         <Link
                           to={`/user/${post.user.id}`}
@@ -319,17 +327,17 @@ const Home = () => {
                       </Card.Title>
                       <Card.Text>{post.content}</Card.Text>
                       <Button
-                        variant={
-                          userLikes[post.id] ? "success" : "outline-primary"
+                        className={
+                          userLikes[post.id]
+                            ? "btn-like-ye mx-2"
+                            : "btn-like-no mx-2"
                         }
-                        className="mr-2"
                         onClick={() => handleLike(post.id)}
                       >
                         {likesCount[post.id] || 0} Likes
                       </Button>
                       <Button
-                        className="mx-4"
-                        variant="primary"
+                        className="view-comm mx-4"
                         onClick={() => toggleCommentsVisibility(post.id)}
                       >
                         {visibleComments[post.id]
@@ -369,7 +377,9 @@ const Home = () => {
                               </Card>
                             ))
                           ) : (
-                            <Alert variant="info">No comments available</Alert>
+                            <Alert className="alert-comm">
+                              No comments available
+                            </Alert>
                           )}
                           <Form className="mt-3">
                             <Form.Group>
@@ -387,8 +397,7 @@ const Home = () => {
                               />
                             </Form.Group>
                             <Button
-                              className="mt-2"
-                              variant="primary"
+                              className=" post-comm mt-2"
                               onClick={() => handleNewCommentSubmit(post.id)}
                             >
                               Post Comment
@@ -402,7 +411,7 @@ const Home = () => {
               </Card>
             ))
           ) : (
-            <Alert variant="info">No posts available</Alert>
+            <Alert className="alert-comm">No posts available</Alert>
           )}
         </Col>
       </Row>

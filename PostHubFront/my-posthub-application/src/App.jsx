@@ -8,6 +8,7 @@ import Register from "./component/Register";
 import Profile from "./component/Profile";
 import UserProfile from "./component/UserProfile";
 import Footer from "./component/Footer";
+import AdminPage from "./component/Adminpage";
 
 const App = () => {
   const isLoggedIn = localStorage.getItem("token") !== null;
@@ -26,6 +27,7 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/user/:userId" element={<UserProfile />} />
+            <Route path="/admin" element={<AdminPage />} />
           </Routes>
         </main>
         {!isRegisterPage && <Footer />}

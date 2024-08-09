@@ -15,7 +15,7 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #03bf63;
   text-decoration: inherit;
 }
 a:hover {
@@ -32,9 +32,7 @@ h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
-.update-btn {
-  margin-right: 0.5em;
-}
+
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -93,7 +91,7 @@ button:focus-visible {
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: #0e0e0e;
+  background-color: #242424;
   padding: 10px 0;
   box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
 }
@@ -138,7 +136,7 @@ button:focus-visible {
 }
 
 .profile-link {
-  color: green;
+  color: #f9f9f9;
   margin-right: 15px;
 }
 
@@ -149,16 +147,19 @@ button:focus-visible {
 .logout-button {
   margin-left: 15px;
   height: 38px;
+  background-color: #e50b05;
+  color: #0e0e0e;
+  font-weight: bold;
+  border-color: #e50b05;
 }
 .container-custom {
-  background-color: #f8f9fa;
   min-height: 100vh;
-  overflow: hidden; /* Prevent the entire container from scrolling */
+  overflow: hidden;
 }
 
 .scrollable-section {
   overflow-y: auto;
-  max-height: calc(100vh - 10rem); /* Adjust height as needed */
+  max-height: calc(100vh - 10rem);
 }
 
 .image-avatar {
@@ -205,16 +206,156 @@ button:focus-visible {
 .mt-5-custom-btn {
   margin-top: 2rem;
 }
+.regist-btn {
+  background-color: #03bf63;
+  width: 100%;
+  border-color: #03bf63;
+  color: #0c0c0c;
+  opacity: 1;
+}
+.login-btn {
+  border-color: #0c0c0c;
+  background-color: #0c0c0c;
+  opacity: 1;
+  color: #e50b05;
+  width: 100%;
+}
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.regist-btn:hover {
+  background-color: #e50b05;
+  border-color: #e50b05;
+}
+.login-btn:hover {
+  background-color: #0c0c0c;
+  border-color: #0c0c0c;
+  opacity: 0.7;
+}
+.pubb-btn {
+  background-color: #03bf63;
+  color: #0e0e0e;
+  border-color: #03bf63;
+  font-weight: bold;
+}
+.pubb-btn:hover {
+  background-color: #0e0e0e;
+  border-color: #0e0e0e;
+  color: #e50b05;
+  font-weight: bold;
+}
+.banner {
+  background-color: #03bf647a;
+  border-color: #03bf63;
+  width: 500px;
+  height: 250px;
+}
+.edit-btn {
+  background-color: #03bf63;
+  border-color: #03bf63;
+  color: #0e0e0e;
+  font-weight: bold;
+}
+.edit-btn:hover {
+  background-color: #0e0e0e;
+  border-color: #0e0e0e;
+  color: #e50b05;
+  font-weight: bold;
+}
+.btn-like-no {
+  background-color: #0e0e0e;
+  border-color: #0e0e0e;
+  color: #e50b05;
+  font-weight: bold;
+}
+.btn-like-ye {
+  background-color: #03bf63;
+  border-color: #03bf63;
+  color: #0e0e0e;
+  font-weight: bold;
+}
+.btn-like-no:hover {
+  background-color: #03bf63;
+  border-color: #03bf63;
+  color: #0e0e0e;
+  font-weight: bold;
+}
+.btn-like-ye:hover {
+  background-color: #0e0e0e;
+  border-color: #0e0e0e;
+  color: #e50b05;
+  font-weight: bold;
+}
+.update-btn {
+  margin-right: 0.5em;
+  background-color: #03bf63;
+  border-color: #03bf63;
+  color: #0e0e0e;
+  font-weight: bold;
+}
+.update-btn:hover {
+  background-color: #0e0e0e;
+  border-color: #0e0e0e;
+  color: #e50b05;
+  font-weight: bold;
+}
+.btn-delete {
+  background-color: #0e0e0e;
+  border-color: #0e0e0e;
+  color: #e50b05;
+  font-weight: bold;
+}
+.btn-delete:hover {
+  background-color: #e50b05;
+  border-color: #e50b05;
+  color: #0e0e0e;
+  font-weight: bold;
+}
+.view-comm {
+  background-color: #03bf63;
+  border-color: #03bf63;
+  color: #0e0e0e;
+  font-weight: bold;
+}
+.view-comm:hover {
+  background-color: #0e0e0e;
+  border-color: #0e0e0e;
+  color: #e50b05;
+  font-weight: bold;
+}
+.post-comm {
+  background-color: #03bf63;
+  border-color: #03bf63;
+  color: #0e0e0e;
+  font-weight: bold;
+}
+.post-comm:hover {
+  background-color: #0e0e0e;
+  border-color: #0e0e0e;
+  color: #e50b05;
+  font-weight: bold;
+}
+.post {
+  background-color: #03bf646a;
+}
+.alert-comm {
+  background-color: #03bf6453;
+  border-color: #03bf63;
+  color: #06371f;
+}
+.btn-delete-comm {
+  background-color: white;
+  border-color: black;
+}
+.btn-delete-comm:hover {
+  background-color: #e50b05;
+  border-color: #e50b05;
+}
+:root {
+  color: #213547;
+  background-color: #ffffff;
+}
+a:hover {
+  color: #e50b05;
+}
+button {
+  background-color: #f9f9f9;
 }

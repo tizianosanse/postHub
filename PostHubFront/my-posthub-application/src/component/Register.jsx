@@ -1,6 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Container, Form, Button, Row, Col, Alert } from "react-bootstrap";
+import {
+  Container,
+  Form,
+  Button,
+  Row,
+  Col,
+  Alert,
+  Image,
+} from "react-bootstrap";
+import myLogo from "../assets/1.svg";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -75,91 +84,99 @@ const Register = () => {
           md={8}
           lg={6}
           xl={4}
-          className="scrollable-form-container"
+          className="scrollable-form-hidden"
         >
           <Form
             onSubmit={handleSubmit}
             className="p-4 border rounded bg-white shadow scrollable-form"
           >
-            <h2 className="text-center mb-3">Registrati</h2>
+            <div className="d-flex justify-content-center mb-3">
+              <Image src={myLogo} width={80} height={80} className="logo" />
+            </div>
             <Form.Group controlId="formName" className="mb-2">
-              <Form.Label>Nome</Form.Label>
+              <Form.Label className="small">Nome</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Inserisci il tuo nome"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                className="form-control-sm"
                 required
               />
             </Form.Group>
             <Form.Group controlId="formSurname" className="mb-2">
-              <Form.Label>Cognome</Form.Label>
+              <Form.Label className="small">Cognome</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Inserisci il tuo cognome"
                 value={surname}
                 onChange={(e) => setSurname(e.target.value)}
+                className="form-control-sm"
                 required
               />
             </Form.Group>
             <Form.Group controlId="formUsername" className="mb-2">
-              <Form.Label>Username</Form.Label>
+              <Form.Label className="small">Username</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Inserisci il tuo username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                className="form-control-sm"
                 required
               />
             </Form.Group>
             <Form.Group controlId="formBios" className="mb-2">
-              <Form.Label>Bios</Form.Label>
+              <Form.Label className="small">Bios</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Inserisci una breve descrizione"
                 value={bios}
                 onChange={(e) => setBios(e.target.value)}
+                className="form-control-sm"
                 required
               />
             </Form.Group>
             <Form.Group controlId="formEmail" className="mb-2">
-              <Form.Label>Email</Form.Label>
+              <Form.Label className="small">Email</Form.Label>
               <Form.Control
                 type="email"
                 placeholder="Inserisci la tua email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                className="form-control-sm"
                 required
               />
             </Form.Group>
             <Form.Group controlId="formPassword" className="mb-2">
-              <Form.Label>Password</Form.Label>
+              <Form.Label className="small">Password</Form.Label>
               <Form.Control
                 type="password"
                 placeholder="Inserisci la tua password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                className="form-control-sm"
                 required
               />
             </Form.Group>
             <Form.Group controlId="formConfirmPassword" className="mb-3">
-              <Form.Label>Conferma Password</Form.Label>
+              <Form.Label className="small">Conferma Password</Form.Label>
               <Form.Control
                 type="password"
                 placeholder="Conferma la tua password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
+                className="form-control-sm"
                 required
               />
             </Form.Group>
             {error && <Alert variant="danger">{error}</Alert>}
             {success && <Alert variant="success">{success}</Alert>}
-            <Button variant="dark" type="submit" className="w-100 mb-2">
+            <Button type="submit" className="regist-btn mb-2 btn-sm w-100">
               Registrati
             </Button>
             <Button
-              variant="primary"
-              className="w-100"
+              className="login-btn btn-sm w-100"
               onClick={() => navigate("/login")}
             >
               Torna al login

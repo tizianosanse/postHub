@@ -47,6 +47,7 @@ public class UsersController {
 
 
     @DeleteMapping("/{userId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void findByIdAndDelete(@PathVariable UUID userId) {
         this.usersService.findByIdAndDelete(userId);

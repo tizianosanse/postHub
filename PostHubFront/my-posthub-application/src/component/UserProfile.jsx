@@ -10,6 +10,7 @@ import {
   Alert,
   Image,
 } from "react-bootstrap";
+import myBannerImage from "../assets/banner.svg";
 
 const UserProfile = () => {
   const { userId } = useParams();
@@ -262,11 +263,16 @@ const UserProfile = () => {
           xs={12}
           md={8}
           lg={9}
-          className="overflow-auto"
+          className="scrollable-section "
           style={{ maxHeight: "calc(100vh - 56px)" }}
         >
-          <Alert variant="warning" className="text-center m-5">
-            Questo è un annuncio pubblicitario!
+          <Alert className="banner alert-center">
+            <Image
+              src={myBannerImage}
+              alt="Advertisement Banner"
+              fluid
+              className="w-100"
+            />
           </Alert>
 
           {error && <Alert variant="danger">{error}</Alert>}
@@ -294,17 +300,17 @@ const UserProfile = () => {
                       </Card.Title>
                       <Card.Text>{post.content}</Card.Text>
                       <Button
-                        variant={
-                          userLikes[post.id] ? "success" : "outline-primary"
+                        className={
+                          userLikes[post.id]
+                            ? "btn-like-ye mr-2"
+                            : "btn-like-no mr-2"
                         }
-                        className="mr-2"
                         onClick={() => handleLike(post.id)}
                       >
                         {likesCount[post.id] || 0} Likes
                       </Button>
                       <Button
-                        className="mx-4"
-                        variant="primary"
+                        className=" view-comm mx-4"
                         onClick={() => toggleCommentsVisibility(post.id)}
                       >
                         {visibleComments[post.id]
@@ -342,7 +348,9 @@ const UserProfile = () => {
                               </Card>
                             ))
                           ) : (
-                            <p>No comments yet.</p>
+                            <Alert className="alert-comm">
+                              No comments available
+                            </Alert>
                           )}
                           <Form.Group className="mt-3">
                             <Form.Control
@@ -355,10 +363,10 @@ const UserProfile = () => {
                             />
                             <Button
                               variant="primary"
-                              className="mt-2"
+                              className=" post-comm mt-2"
                               onClick={() => handleNewCommentSubmit(post.id)}
                             >
-                              Submit
+                              post comment
                             </Button>
                           </Form.Group>
                         </div>

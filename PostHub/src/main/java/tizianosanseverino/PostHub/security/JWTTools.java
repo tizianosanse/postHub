@@ -4,16 +4,22 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import tizianosanseverino.PostHub.entities.Role;
 import tizianosanseverino.PostHub.entities.User;
+import tizianosanseverino.PostHub.exceptions.NotFoundException;
 import tizianosanseverino.PostHub.exceptions.UnauthorizedException;
+import tizianosanseverino.PostHub.repositories.UsersRepository;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 public class JWTTools {
-
+@Autowired
+    UsersRepository usersRepository;
     @Value("${jwt.secret}")
     private String secret;
 

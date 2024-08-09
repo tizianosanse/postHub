@@ -45,17 +45,19 @@ public class RolesAndAdminInitializer {
                 System.out.println("rolesService is initialized");
             }
 
-            if (usersRepository.findByEmail("striscialanotizia@gmail.com").isEmpty()) {
+            if (usersRepository.findByEmail("tizianosanseverino23@gmail.com").isEmpty()) {
                 Role adminRole = rolesService.findByName("ADMIN");
                 List<Role> roles = List.of(adminRole);
                 User adminUser = new User(
-                        "striscialanotizia@gmail.com",
-                        bcrypt.encode("belandi"),
-                        "Gabibbo",
-                        "Hammer",
-                        "banHammer",
+                        "tiziano",
+
+                        "sanseverino",
+                        "tiziano.sanse",
+                        "tizianosanseverino23@gmail.com",
+                        bcrypt.encode("lazio123")
+                        ,
                         "admin del social network",
-                        "https://ui-avatars.com/api/?name=Gabibbo+Hammer",
+                        "https://ui-avatars.com/api/?name=Tiziano+Sanseverino",
                         roles
                 );
                 usersRepository.save(adminUser);

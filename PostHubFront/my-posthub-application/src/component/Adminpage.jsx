@@ -70,6 +70,12 @@ const AdminPage = () => {
                 <Card.Title>{user.username}</Card.Title>
                 <Card.Subtitle className="mb-2 text-muted">
                   {user.name}
+                </Card.Subtitle>{" "}
+                <Card.Subtitle className="mb-2 text-muted">
+                  {user.surname}
+                </Card.Subtitle>
+                <Card.Subtitle className="mb-2 text-muted">
+                  {user.email}
                 </Card.Subtitle>
                 <Button variant="danger" onClick={() => handleDelete(user.id)}>
                   Delete User
